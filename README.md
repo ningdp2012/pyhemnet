@@ -1,5 +1,10 @@
 # PyHemnet
 
+[![PyPI version](https://badge.fury.io/py/pyhemnet.svg)](https://pypi.org/project/pyhemnet/)
+[![Python versions](https://img.shields.io/pypi/pyversions/pyhemnet.svg)](https://pypi.org/project/pyhemnet/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Downloads](https://img.shields.io/pypi/dm/pyhemnet)](https://pypi.org/project/pyhemnet/)
+
 A Python library for accessing Hemnet.se property data. Extract property sales information including prices, locations, sizes, and detailed property characteristics.
 
 ## Features
