@@ -1,1 +1,1 @@
-"""Tests for swedish-scraper package"""
+"""Tests for pyhemnet package"""
