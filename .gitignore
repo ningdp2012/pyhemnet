@@ -1,3 +1,6 @@
+# Publishing guide (internal use only)
+PUBLISHING.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
