@@ -39,7 +39,8 @@ class HemnetScraper:
         self,
         url_type: str,
         location_id: str | None = None,
-        item_types: list[HemnetItemType | str] | None = None
+        item_types: list[HemnetItemType | str] | None = None,
+        page: int | None = None
     ) -> str:
         """Build URL dynamically based on type (internal)
 
@@ -47,6 +48,7 @@ class HemnetScraper:
             url_type: Type of URL to build ('listings' or 'sold')
             location_id: Hemnet location ID (optional)
             item_types: List of property types (optional)
+            page: Page number for pagination (optional, starts at 1)
 
         Returns:
             Constructed URL string
@@ -76,6 +78,10 @@ class HemnetScraper:
             params.extend(["by=creation", "order=desc"])
         else:  # sold
             params.extend(["by=sale_date", "order=desc"])
+
+        # Add page number if provided
+        if page and page > 1:
+            params.append(f"page={page}")
 
         # Build final URL
         if params:
@@ -314,7 +320,8 @@ class HemnetScraper:
     def get_listings(
         self,
         location_id: str | None = None,
-        item_types: list[HemnetItemType | str] | None = None
+        item_types: list[HemnetItemType | str] | None = None,
+        page: int | None = None
     ) -> list[dict]:
         """Get detailed listings for properties currently for sale
 
@@ -328,7 +335,7 @@ class HemnetScraper:
             requests.exceptions.HTTPError: If the HTTP request fails
         """
         try:
-            url = self._build_url('listings', location_id, item_types)
+            url = self._build_url('listings', location_id, item_types, page)
             json_data = self._make_request(url)
             listings = self._parse_listing_details(json_data)
             return listings
@@ -338,7 +345,8 @@ class HemnetScraper:
     def get_sold(
         self,
         location_id: str | None = None,
-        item_types: list[HemnetItemType | str] | None = None
+        item_types: list[HemnetItemType | str] | None = None,
+        page: int | None = None
     ) -> list[dict]:
         """Get detailed listings for sold homes
 
@@ -368,7 +376,7 @@ class HemnetScraper:
             requests.exceptions.HTTPError: If the HTTP request fails
         """
         try:
-            url = self._build_url('sold', location_id, item_types)
+            url = self._build_url('sold', location_id, item_types, page)
             json_data = self._make_request(url)
             homes = self._parse_sold_details(json_data)
             return homes
