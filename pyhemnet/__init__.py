@@ -5,6 +5,7 @@ __author__ = "ningdp2012"
 
 # Import scraper classes
 from .hemnet import HemnetScraper
+from .qasa import QasaScraper
 
 # Import enums
 from .constants import HemnetItemType
@@ -12,4 +13,5 @@ from .constants import HemnetItemType
 __all__ = [
     "HemnetScraper",
     "HemnetItemType",
+    "QasaScraper",
 ]
