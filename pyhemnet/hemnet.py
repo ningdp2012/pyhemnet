@@ -40,7 +40,7 @@ class HemnetScraper:
         url_type: str,
         location_id: str | None = None,
         item_types: list[HemnetItemType | str] | None = None,
-        page: int | None = None
+        page: int | None = None,
     ) -> str:
         """Build URL dynamically based on type (internal)
 
@@ -59,7 +59,9 @@ class HemnetScraper:
         # Select base URL
         base_url = HEMNET_URLS.get(url_type)
         if base_url is None:
-            raise ValueError(f"Invalid url_type: {url_type}. Must be 'listings' or 'sold'")
+            raise ValueError(
+                f"Invalid url_type: {url_type}. Must be 'listings' or 'sold'"
+            )
 
         params = []
 
@@ -69,12 +71,14 @@ class HemnetScraper:
 
         # Add item_types if provided
         if item_types:
-            item_type_strs = [t.value if isinstance(t, HemnetItemType) else t for t in item_types]
+            item_type_strs = [
+                t.value if isinstance(t, HemnetItemType) else t for t in item_types
+            ]
             for item_type in item_type_strs:
                 params.append(f"item_types[]={item_type}")
 
         # Add sorting parameters
-        if url_type == 'listings':
+        if url_type == "listings":
             params.extend(["by=creation", "order=desc"])
         else:  # sold
             params.extend(["by=sale_date", "order=desc"])
@@ -166,16 +170,19 @@ class HemnetScraper:
 
             # Find listing data
             listing_data = next(
-                (v for k, v in summary.items() if k.startswith("searchForSaleListings")),
-                None
+                (
+                    v
+                    for k, v in summary.items()
+                    if k.startswith("searchForSaleListings")
+                ),
+                None,
             )
             if listing_data is None or "total" not in listing_data:
                 raise ValueError("Missing searchForSaleListings data")
 
             # Find sold data
             sold_data = next(
-                (v for k, v in summary.items() if k.startswith("searchSales")),
-                None
+                (v for k, v in summary.items() if k.startswith("searchSales")), None
             )
             if sold_data is None or "total" not in sold_data:
                 raise ValueError("Missing searchSales data")
@@ -211,30 +218,37 @@ class HemnetScraper:
 
         # Use list comprehension instead of dict comprehension + .values()
         listing_cards = [
-            value for key, value in details.items()
-            if key.startswith("ListingCard:") and isinstance(value, dict) and value.get("__typename") == "ListingCard"
+            value
+            for key, value in details.items()
+            if key.startswith("ListingCard:")
+            and isinstance(value, dict)
+            and value.get("__typename") == "ListingCard"
         ]
 
         homes = []
         for data in listing_cards:
             try:
-                homes.append({
-                    "id": data.get("id"),
-                    "address": data.get("streetAddress"),
-                    "location": data.get("locationDescription"),
-                    "housing_type": self._extract_housing_type(data),
-                    "rooms": self._extract_int(data.get("rooms")),
-                    "living_area": self._clean_area_string(data.get("livingAndSupplementalAreas")),
-                    "land_area": self._clean_area_string(data.get("landArea")),
-                    "asking_price": self._extract_int(data.get("askingPrice")),
-                    "published_at": self._format_timestamp(data.get("publishedAt")),
-                    "removed_before_showing": data.get("removedBeforeShowing"),
-                    "new_construction": data.get("newConstruction"),
-                    "broker_name": data.get("brokerName"),
-                    "broker_agent": data.get("brokerAgencyName"),
-                    "labels": self._extract_labels(data),
-                    "description": data.get("description"),
-                })
+                homes.append(
+                    {
+                        "id": data.get("id"),
+                        "address": data.get("streetAddress"),
+                        "location": data.get("locationDescription"),
+                        "housing_type": self._extract_housing_type(data),
+                        "rooms": self._extract_int(data.get("rooms")),
+                        "living_area": self._clean_area_string(
+                            data.get("livingAndSupplementalAreas")
+                        ),
+                        "land_area": self._clean_area_string(data.get("landArea")),
+                        "asking_price": self._extract_int(data.get("askingPrice")),
+                        "published_at": self._format_timestamp(data.get("publishedAt")),
+                        "removed_before_showing": data.get("removedBeforeShowing"),
+                        "new_construction": data.get("newConstruction"),
+                        "broker_name": data.get("brokerName"),
+                        "broker_agent": data.get("brokerAgencyName"),
+                        "labels": self._extract_labels(data),
+                        "description": data.get("description"),
+                    }
+                )
             except (ValueError, TypeError, AttributeError) as e:
                 # Skip individual listings with bad data rather than failing entire parse
                 logger.debug(f"Skipping listing {data.get('id', 'unknown')}: {e}")
@@ -261,29 +275,36 @@ class HemnetScraper:
 
         # Use list comprehension instead of dict comprehension + .values()
         sale_cards = [
-            value for key, value in details.items()
-            if key.startswith("SaleCard:") and isinstance(value, dict) and value.get("__typename") == "SaleCard"
+            value
+            for key, value in details.items()
+            if key.startswith("SaleCard:")
+            and isinstance(value, dict)
+            and value.get("__typename") == "SaleCard"
         ]
 
         homes = []
         for data in sale_cards:
             try:
-                homes.append({
-                    "id": data.get("id"),
-                    "listing_id": data.get("listingId"),
-                    "address": data.get("streetAddress"),
-                    "location": data.get("locationDescription"),
-                    "housing_type": self._extract_housing_type(data),
-                    "rooms": self._extract_int(data.get("rooms")),
-                    "living_area": self._clean_area_string(data.get("livingArea")),
-                    "land_area": self._clean_area_string(data.get("landArea")),
-                    "asking_price": self._extract_int(data.get("askingPrice")),
-                    "final_price": self._extract_int(data.get("finalPrice")),
-                    "price_change": self._clean_area_string(data.get("priceChange")),
-                    "sold_at": self._format_timestamp(data.get("soldAt")),
-                    "broker": data.get("brokerAgencyName"),
-                    "labels": self._extract_labels(data),
-                })
+                homes.append(
+                    {
+                        "id": data.get("id"),
+                        "listing_id": data.get("listingId"),
+                        "address": data.get("streetAddress"),
+                        "location": data.get("locationDescription"),
+                        "housing_type": self._extract_housing_type(data),
+                        "rooms": self._extract_int(data.get("rooms")),
+                        "living_area": self._clean_area_string(data.get("livingArea")),
+                        "land_area": self._clean_area_string(data.get("landArea")),
+                        "asking_price": self._extract_int(data.get("askingPrice")),
+                        "final_price": self._extract_int(data.get("finalPrice")),
+                        "price_change": self._clean_area_string(
+                            data.get("priceChange")
+                        ),
+                        "sold_at": self._format_timestamp(data.get("soldAt")),
+                        "broker": data.get("brokerAgencyName"),
+                        "labels": self._extract_labels(data),
+                    }
+                )
             except (ValueError, TypeError, AttributeError) as e:
                 # Skip individual listings with bad data rather than failing entire parse
                 logger.debug(f"Skipping sold home {data.get('id', 'unknown')}: {e}")
@@ -294,7 +315,7 @@ class HemnetScraper:
     def get_summary(
         self,
         location_id: str | None = None,
-        item_types: list[HemnetItemType | str] | None = None
+        item_types: list[HemnetItemType | str] | None = None,
     ) -> tuple[int, int]:
         """Get summary statistics for all properties
 
@@ -310,7 +331,7 @@ class HemnetScraper:
             requests.exceptions.HTTPError: If the HTTP request fails
         """
         try:
-            url = self._build_url('listings', location_id, item_types)
+            url = self._build_url("listings", location_id, item_types)
             json_data = self._make_request(url)
             listing, sold = self._parse_summary(json_data)
             return listing, sold
@@ -321,7 +342,7 @@ class HemnetScraper:
         self,
         location_id: str | None = None,
         item_types: list[HemnetItemType | str] | None = None,
-        page: int | None = None
+        page: int | None = None,
     ) -> list[dict]:
         """Get detailed listings for properties currently for sale
 
@@ -335,7 +356,7 @@ class HemnetScraper:
             requests.exceptions.HTTPError: If the HTTP request fails
         """
         try:
-            url = self._build_url('listings', location_id, item_types, page)
+            url = self._build_url("listings", location_id, item_types, page)
             json_data = self._make_request(url)
             listings = self._parse_listing_details(json_data)
             return listings
@@ -346,7 +367,7 @@ class HemnetScraper:
         self,
         location_id: str | None = None,
         item_types: list[HemnetItemType | str] | None = None,
-        page: int | None = None
+        page: int | None = None,
     ) -> list[dict]:
         """Get detailed listings for sold homes
 
@@ -376,7 +397,7 @@ class HemnetScraper:
             requests.exceptions.HTTPError: If the HTTP request fails
         """
         try:
-            url = self._build_url('sold', location_id, item_types, page)
+            url = self._build_url("sold", location_id, item_types, page)
             json_data = self._make_request(url)
             homes = self._parse_sold_details(json_data)
             return homes

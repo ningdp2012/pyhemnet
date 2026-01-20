@@ -5,12 +5,13 @@ from enum import Enum
 # Hemnet URLs mapping
 HEMNET_URLS = {
     "listings": "https://www.hemnet.se/bostader",
-    "sold": "https://www.hemnet.se/salda/bostader"
+    "sold": "https://www.hemnet.se/salda/bostader",
 }
 
 
 class HemnetItemType(str, Enum):
     """Hemnet property item types"""
+
     VILLA = "villa"
     RADHUS = "radhus"
     BOSTADSRATT = "bostadsratt"
@@ -30,6 +31,7 @@ QASA_HEADERS = {
 
 class QasaHomeType(Enum):
     """Qasa home types"""
+
     HOUSE = ["house"]
     TERRACE_HOUSE = ["terrace_house", "duplex"]
     APARTMENT = ["apartment", "loft"]
@@ -40,6 +42,7 @@ class QasaHomeType(Enum):
 
 class QasaShared(Enum):
     """Qasa shared rental options"""
+
     SHARED = True
     NOT_SHARED = False
     ALL = None
@@ -47,6 +50,7 @@ class QasaShared(Enum):
 
 class QasaFurniture(Enum):
     """Qasa furniture options"""
+
     FURNISHED = True
     UNFURNISHED = False
     ALL = None
@@ -54,6 +58,7 @@ class QasaFurniture(Enum):
 
 class QasaCategory(Enum):
     """Qasa rental category filters (mutually exclusive)"""
+
     ALL_HOMES = None  # No filter applied
     FIRST_HAND = "firsthand"  # firsthand: true
     STUDENT_HOUSING = "studentHome"  # studentHome: true
@@ -63,6 +68,7 @@ class QasaCategory(Enum):
 
 class QasaRules(Enum):
     """Qasa rental rules filters (can be combined)"""
+
     PETS_ALLOWED = "pets"  # pets: true
     SMOKING_ALLOWED = "smoker"  # smoker: true
 

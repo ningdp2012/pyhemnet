@@ -71,10 +71,7 @@ class QasaScraper:
         """
         try:
             response = requests.post(
-                self.url,
-                headers=self.headers,
-                json=payload,
-                timeout=10
+                self.url, headers=self.headers, json=payload, timeout=10
             )
             response.raise_for_status()
             return response.json()
@@ -100,19 +97,21 @@ class QasaScraper:
             for home in homes:
                 try:
                     location = home.get("location", {})
-                    parsed_homes.append({
-                        "id": home.get("id"),
-                        "title": home.get("title"),
-                        "rent": home.get("rent"),
-                        "currency": home.get("currency"),
-                        "rooms": home.get("roomCount"),
-                        "square_meters": home.get("squareMeters"),
-                        "start_date": self._parse_date(home.get("startDate")),
-                        "locality": location.get("locality"),
-                        "route": location.get("route"),
-                        "street_number": location.get("streetNumber"),
-                        "country_code": location.get("countryCode"),
-                    })
+                    parsed_homes.append(
+                        {
+                            "id": home.get("id"),
+                            "title": home.get("title"),
+                            "rent": home.get("rent"),
+                            "currency": home.get("currency"),
+                            "rooms": home.get("roomCount"),
+                            "square_meters": home.get("squareMeters"),
+                            "start_date": self._parse_date(home.get("startDate")),
+                            "locality": location.get("locality"),
+                            "route": location.get("route"),
+                            "street_number": location.get("streetNumber"),
+                            "country_code": location.get("countryCode"),
+                        }
+                    )
                 except (ValueError, TypeError, AttributeError) as e:
                     logger.debug(f"Skipping home {home.get('id', 'unknown')}: {e}")
                     continue
@@ -263,7 +262,10 @@ class QasaScraper:
             "variables": {
                 "limit": 60,
                 "offset": 0,
-                "order": {"direction": "descending", "orderBy": "published_or_bumped_at"},
+                "order": {
+                    "direction": "descending",
+                    "orderBy": "published_or_bumped_at",
+                },
                 "params": {
                     "areaIdentifier": area_identifier,
                     "currency": "SEK",

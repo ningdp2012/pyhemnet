@@ -113,6 +113,7 @@ class TestQasaScraper:
     def test_error_handling(self, mock_post, scraper):
         """Test error handling"""
         import requests
+
         mock_post.side_effect = requests.exceptions.RequestException("API Error")
 
         with pytest.raises(ValueError):
