@@ -125,13 +125,29 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Ruff
+.ruff_cache/
+
+# pyright
+pyrightconfig.json
+
+# uv
+uv.lock
+
 # IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.vim/
 
 # OS
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Virtual environments (additional patterns)
+.Python
+pyvenv.cfg
