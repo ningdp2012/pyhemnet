@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/pyhemnet.svg)](https://pypi.org/project/pyhemnet/)
 [![Python versions](https://img.shields.io/pypi/pyversions/pyhemnet.svg)](https://pypi.org/project/pyhemnet/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Downloads](https://img.shields.io/pypi/dm/pyhemnet)](https://pypi.org/project/pyhemnet/)
+[![Downloads](https://static.pepy.tech/badge/pyhemnet/month)](https://pepy.tech/project/pyhemnet)
 
 A Python library for accessing Swedish real estate and rental property data from Hemnet.se and Qasa.se. Extract property sales information, rental listings, prices, locations, and detailed property characteristics.
 
