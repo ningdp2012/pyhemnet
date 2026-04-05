@@ -5,7 +5,7 @@ import json
 import logging
 import re
 
-import cloudscraper
+from curl_cffi import requests as curl_requests
 from bs4 import BeautifulSoup
 
 from .constants import HEMNET_URLS, HemnetItemType
@@ -33,7 +33,7 @@ class HemnetScraper:
 
     def __init__(self):
         """Initialize the Hemnet scraper"""
-        self.scraper = cloudscraper.create_scraper()
+        self.scraper = curl_requests.Session(impersonate="chrome")
 
     def _build_url(
         self,
